@@ -5,8 +5,32 @@
 #include <time.h>
 #include <stdlib.h> 
 #include <windows.h> 
+#include <vector>
 
 int size = 10;
+const int width = 40;
+const int height = 25;
+sf::RenderWindow window(sf::VideoMode((size* width * 2 + (size * 2)), (size* height * 2 + (size * 2))), "Maze Generator!", sf::Style::Titlebar | sf::Style::Close);
+
+void draw_maze(sf::RectangleShape shape, bool maze_walls[2*height+1][2*width+1]) {
+    for (int i = 0; i < 2 * height + 1; i++) {
+        for (int j = 0; j < 2 * width + 1; j++) {
+            shape.setPosition(j * size, i * size);
+            if (maze_walls[i][j] == 1)shape.setFillColor(sf::Color::Red);
+            if (maze_walls[i][j] == 0)shape.setFillColor(sf::Color::White);
+            window.draw(shape);
+            window.display();
+            //Sleep(1);
+
+        }
+    }
+}
+int pos_y_walls(int posx) {
+    return 2 * posx + 1;
+}
+int pos_x_walls(int posy) {
+    return 2 * posy + 1;
+}
 /*
 class Square {
 protected:
@@ -35,8 +59,8 @@ public:
 };
 */
 int main() {
-	const int width = 40;
-	const int height = 25;
+	//const int width = 40;
+	//const int height = 25;
 
 	bool visited[height][width]; //without new, add, add, empty first.
     memset(visited, false, sizeof(visited));
@@ -55,14 +79,18 @@ int main() {
 		}
 	}
 
+    int posx = 0;
+    int posy = 0;
+
+    std::vector<int> ifcross(4);
 
 	//memset(maze_walls, true, sizeof(maze_walls)); //?? better way
-	//std::stack <std::pair<int, int>> maze_stack;
+	std::stack <std::pair<int, int>> maze_stack;
 	
 
     srand(time(NULL));
 
-    sf::RenderWindow window(sf::VideoMode((size*width*2+(size*2)), (size * height * 2 + (size * 2))), "Maze Generator!", sf::Style::Titlebar | sf::Style::Close);
+    //sf::RenderWindow window(sf::VideoMode((size*width*2+(size*2)), (size * height * 2 + (size * 2))), "Maze Generator!", sf::Style::Titlebar | sf::Style::Close);
 
     sf::RectangleShape shape{ (sf::Vector2f(10, 10)) };
     shape.setFillColor(sf::Color::Yellow);
@@ -75,7 +103,7 @@ int main() {
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-
+            /*
             for (int i = 0; i < 2 * height + 1; i++) {
                 for (int j = 0; j < 2 * width + 1; j++) {
                     shape.setPosition(j * size, i * size);
@@ -87,12 +115,42 @@ int main() {
 
                 }
             }
+            */
+            draw_maze(shape, maze_walls);
             Sleep(10);
-            entry=rand() % width;
-            maze_walls[i][j]
-            while (true) {
 
+            int entry=rand() % width;
+            //maze[y][x]
+            posy = 0;
+            posx = entry;
+
+            //pos_y_walls = 2 * posx+1;
+            //pos_x_walls = 2 * posy + 1;
+
+            maze_walls[pos_y_walls(posy)][pos_x_walls(posx)] = 0;
+            maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
+            visited[posy][posx]=1;
+            if (posy>0) if (visited[posy-1][posx]==0) ifcross.push_back(0);
+            if (posx>0) if (visited[posy][posx-1] == 0) ifcross.push_back(1);
+            if (posy<height-1) if (visited[posy+1][posx] == 0) ifcross.push_back(2);
+            if (posx<width-1) if (visited[posy][posx+1] == 0) ifcross.push_back(3);
+            //visited[posy][posx]
+            
+            if (ifcross.size() > 1) {
+                int h = rand() % ifcross.size(); //0,1,2,3 //0,2,3
+                
+                if (ifcross.at(h) == 0) posy--; //go up
+                if (ifcross.at(h) == 0) posx++;//go right
+                if (ifcross.at(h) == 0) posy++; //go down
+                if (ifcross.at(h) == 0) posx--; //go left
             }
+
+            //if (ifcross.size()<1) cofamy siê bo nie ma gdzie iœæ
+
+            ifcross.clear();
+            //while (true) {
+
+            //}
         }
     }//Sleep(10);
 

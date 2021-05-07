@@ -82,6 +82,8 @@ int main() {
     int posx = 0;
     int posy = 0;
 
+    int direction; //0 up, 1 right, 2 down, 3 left
+
     std::vector<int> ifcross(4);
 
 	//memset(maze_walls, true, sizeof(maze_walls)); //?? better way
@@ -130,23 +132,38 @@ int main() {
             maze_walls[pos_y_walls(posy)][pos_x_walls(posx)] = 0;
             maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
             visited[posy][posx]=1;
+
+
             if (posy>0) if (visited[posy-1][posx]==0) ifcross.push_back(0);
             if (posx>0) if (visited[posy][posx-1] == 0) ifcross.push_back(1);
             if (posy<height-1) if (visited[posy+1][posx] == 0) ifcross.push_back(2);
             if (posx<width-1) if (visited[posy][posx+1] == 0) ifcross.push_back(3);
             //visited[posy][posx]
-            
-            if (ifcross.size() > 1) {
+
+            if (ifcross.size() > 1) maze_stack.push({ posx, posy });
+
+
+            if (ifcross.size() >= 1) {
                 int h = rand() % ifcross.size(); //0,1,2,3 //0,2,3
                 
-                if (ifcross.at(h) == 0) posy--; //go up
-                if (ifcross.at(h) == 0) posx++;//go right
-                if (ifcross.at(h) == 0) posy++; //go down
-                if (ifcross.at(h) == 0) posx--; //go left
+                if (ifcross.at(h) == 0) {posy--; direction = 0;}//go up
+                if (ifcross.at(h) == 1) {posx++; direction = 1;}//go right
+                if (ifcross.at(h) == 2) {posy++; direction = 2;}//go down
+                if (ifcross.at(h) == 3) {posx--; direction = 3;}//go left
             }
+            //this also in up if
+            visited[posy][posx] = 1;
 
-            //if (ifcross.size()<1) cofamy siê bo nie ma gdzie iœæ
-
+            if (direction == 0) maze_walls[pos_y_walls(posy) - 1][pos_x_walls(posx)] = 0;
+            if (direction == 1) maze_walls[pos_y_walls(posy)][pos_x_walls(posx)+1] = 0;
+            if (direction == 2) maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
+            if (direction == 3) maze_walls[pos_y_walls(posy) ][pos_x_walls(posx)-1] = 0;
+            //}
+            if (ifcross.size()<1)
+                //what happend in here
+                //we go back to place where cross was
+                //maze_stack.top.... and then once again
+                
             ifcross.clear();
             //while (true) {
 

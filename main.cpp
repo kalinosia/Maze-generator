@@ -159,11 +159,15 @@ int main() {
             if (direction == 2) maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
             if (direction == 3) maze_walls[pos_y_walls(posy) ][pos_x_walls(posx)-1] = 0;
             //}
-            if (ifcross.size()<1)
+            if (ifcross.size() < 1) {
                 //what happend in here
                 //we go back to place where cross was
                 //maze_stack.top.... and then once again
-                
+                if (maze_stack.size() == 0) break;
+                else {
+                    posx, posy=maze_stack.top()
+                }
+            }
             ifcross.clear();
             //while (true) {
 

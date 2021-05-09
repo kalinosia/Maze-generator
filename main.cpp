@@ -24,6 +24,7 @@ void draw_maze(sf::RectangleShape shape, bool maze_walls[2*height+1][2*width+1])
 
         }
     }
+    //Sleep(10);
 }
 int pos_y_walls(int posx) {
     return 2 * posx + 1;
@@ -119,7 +120,7 @@ int main() {
             }
             */
             draw_maze(shape, maze_walls);
-            Sleep(10);
+            //Sleep(10);
 
             int entry=rand() % width;
             //maze[y][x]
@@ -132,47 +133,66 @@ int main() {
             maze_walls[pos_y_walls(posy)][pos_x_walls(posx)] = 0;
             maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
             visited[posy][posx]=1;
+            bool maze_end = false;
+            
+            while(!maze_end){
+
+                if (posy > 0) { if (visited[posy - 1][posx] == 0) ifcross.push_back(0); }
+                if (posx>0) if (visited[posy][posx-1] == 0) ifcross.push_back(1);
+                if (posy<height-1) if (visited[posy+1][posx] == 0) ifcross.push_back(2);
+                if (posx<width-1) if (visited[posy][posx+1] == 0) ifcross.push_back(3);
+                //visited[posy][posx]
+
+                if (ifcross.size() > 1) maze_stack.push({ posx, posy });
 
 
-            if (posy>0) if (visited[posy-1][posx]==0) ifcross.push_back(0);
-            if (posx>0) if (visited[posy][posx-1] == 0) ifcross.push_back(1);
-            if (posy<height-1) if (visited[posy+1][posx] == 0) ifcross.push_back(2);
-            if (posx<width-1) if (visited[posy][posx+1] == 0) ifcross.push_back(3);
-            //visited[posy][posx]
-
-            if (ifcross.size() > 1) maze_stack.push({ posx, posy });
-
-
-            if (ifcross.size() >= 1) {
-                int h = rand() % ifcross.size(); //0,1,2,3 //0,2,3
+                if (ifcross.size() >= 1) {
+                    int h = rand() % ifcross.size(); //0,1,2,3 //0,2,3
                 
-                if (ifcross.at(h) == 0) {posy--; direction = 0;}//go up
-                if (ifcross.at(h) == 1) {posx++; direction = 1;}//go right
-                if (ifcross.at(h) == 2) {posy++; direction = 2;}//go down
-                if (ifcross.at(h) == 3) {posx--; direction = 3;}//go left
-            }
-            //this also in up if
-            visited[posy][posx] = 1;
+                    if (ifcross.at(h) == 0) {posy--; direction = 0;}//go up
+                    if (ifcross.at(h) == 1) {posx++; direction = 1;}//go right
+                    if (ifcross.at(h) == 2) {posy++; direction = 2;}//go down
+                    if (ifcross.at(h) == 3) {posx--; direction = 3;}//go left
+            
+                    //this also in up if
+                    visited[posy][posx] = 1;
 
-            if (direction == 0) maze_walls[pos_y_walls(posy) - 1][pos_x_walls(posx)] = 0;
-            if (direction == 1) maze_walls[pos_y_walls(posy)][pos_x_walls(posx)+1] = 0;
-            if (direction == 2) maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
-            if (direction == 3) maze_walls[pos_y_walls(posy) ][pos_x_walls(posx)-1] = 0;
-            //}
-            if (ifcross.size() < 1) {
+                    if (direction == 0) maze_walls[pos_y_walls(posy) - 1][pos_x_walls(posx)] = 0;
+                    if (direction == 1) maze_walls[pos_y_walls(posy)][pos_x_walls(posx)+1] = 0;
+                    if (direction == 2) maze_walls[pos_y_walls(posy) + 1][pos_x_walls(posx)] = 0;
+                    if (direction == 3) maze_walls[pos_y_walls(posy) ][pos_x_walls(posx)-1] = 0;
+                }
+                else if (ifcross.size() < 1) {
                 //what happend in here
                 //we go back to place where cross was
                 //maze_stack.top.... and then once again
-                if (maze_stack.size() == 0) break;
-                else {
-                    posx, posy=maze_stack.top()
+                    if (maze_stack.size() == 0) {
+                        maze_end = true;
+                        for (int i = 0; i < 2 * height + 1; i++) {
+                            for (int j = 0; j < 2 * width + 1; j++) {
+                                if (visited[i][j] == 0) maze_end = false;;
+                            }
+                        }
+                        break;//if no cross up is end of maze or check if visited every???
+                    }
+                    else if (posx == maze_stack.top().first and posy == maze_stack.top().second) {
+                        maze_stack.pop();
+                        posx = maze_stack.top().first;
+                        posy = maze_stack.top().second;
+                    }
+                    else {
+                        posx = maze_stack.top().first;
+                        posy = maze_stack.top().second;
+                    }
                 }
-            }
             ifcross.clear();
-            //while (true) {
+            draw_maze(shape, maze_walls);
+            std::cout << "Draw loop\n";
 
-            //}
+            }
+
         }
+        Sleep(1000);
     }//Sleep(10);
 
 	return 0;

@@ -147,12 +147,12 @@ int main() {
                 else if (ifcross.size() < 1) { //if we can do anyway
                     if (maze_stack.size() <=1) {//if in stack nothing we cant undo 
                         maze_end = true; //end of loop
-                        /*/MORE CHECK IF REALLY EVERY SQUARE VISITED
-                        for (int i = 0; i < 2 * height + 1; i++) {
-                            for (int j = 0; j < 2 * width + 1; j++) {
-                                if (visited[i][j] == 0) maze_end = false;;
+                        // MORE CHECK IF REALLY EVERY SQUARE VISITED
+                        for (int i = 0; i < height ; i++) {
+                            for (int j = 0; j < width ; j++) {
+                                if (visited[i][j] == 0) maze_end = false;
                             }
-                        }*/
+                        }
                         break;
                     }
                     else if (posx == maze_stack.top().first and posy == maze_stack.top().second) {
@@ -177,9 +177,30 @@ int main() {
                 maze_walls[2 * height ][posWalls(h)] = 0;
                 maze_ended = false;
             }
+
+            //////////////////////////////////////////////
+            for (int i = 0; i < 2 * height + 1; i++) {
+                for (int j = 0; j < 2 * width + 1; j++) {
+                    std::cout << maze_walls[i][j] << " ";
+
+                }
+                std::cout << std::endl;
+            }
+            //////////////////////////////////////////////
+            draw_maze(shape, maze_walls);
+        }
+        /*
+        for (int i = 0; i < 2 * height + 1; i++) {
+            for (int j = 0; j < 2 * width + 1; j++) {
+                shape.setPosition(j * size, i * size);
+                std::cout << maze_walls[i][j] << " ";
+
+            }
+            std::cout << std::endl;
         }
         draw_maze(shape, maze_walls);
         Sleep(10000);//???????????
+        */
     }//While window is open
 
 	return 0;

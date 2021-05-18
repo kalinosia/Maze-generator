@@ -48,7 +48,14 @@ RecBacktrack::~RecBacktrack() {
 int RecBacktrack::posWalls(int pos) {
     return 2 * pos + 1;
 }
-
+///CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS 
+int RecBacktrack::get_posx() {
+    return posWalls(posx);
+}
+int RecBacktrack::get_posy() {
+    return posWalls(posy);
+}
+// ///CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS 
 /// ///////////////////////////////////////////     loop
 
 void RecBacktrack::make_maze() {

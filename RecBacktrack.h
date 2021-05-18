@@ -32,7 +32,11 @@ class RecBacktrack
 		RecBacktrack();
 		~RecBacktrack();
 		void make_maze();
-		
+		///CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS 
+		int get_posx();
+		int get_posy();
+		///CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS CHNGE THIS 
+
 		bool maze_walls[2 * height + 1][2 * width + 1];
 
 		bool maze_end() {

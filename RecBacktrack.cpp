@@ -1,6 +1,6 @@
 #include "RecBacktrack.h"
 #include <iostream>
-
+#include <fstream>
 
 
 RecBacktrack::RecBacktrack(){
@@ -43,6 +43,16 @@ RecBacktrack::~RecBacktrack() {
 	if (maze_walls[2 * height - 1][posWalls(h)] == 0) {
 		maze_walls[2 * height][posWalls(h)] = 0;
 	}
+    //SAVE TO FILE AT THE END
+    std::ofstream myfile;
+    myfile.open("maze01.txt");
+    for (int i = 0; i < 2 * height + 1; i++) {
+        for (int j = 0; j < 2 * width + 1; j++) {
+            myfile << maze_walls[i][j];
+        }
+        myfile << "\n";
+    }
+    myfile.close();
 	//and save maze matrix ???
 }
 int RecBacktrack::posWalls(int pos) {

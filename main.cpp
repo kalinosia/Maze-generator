@@ -6,6 +6,8 @@
 #include <stdlib.h> 
 #include <windows.h> 
 #include <vector>
+#include <fstream>
+
 #include "RecBacktrack.h"
 
 const int size = 10;
@@ -63,11 +65,10 @@ int main() {
 
         draw_maze(shape, maze.maze_walls,x,y); //draw maze on every stage
 
-      
-
         
        
     }//While window is open
 
+   
 	return 0;
 }
